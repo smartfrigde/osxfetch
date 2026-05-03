@@ -2,7 +2,7 @@
 
 ![screenshot](screenshot.jpg)
 
-A lightweight, neofetch-like CLI tool for displaying system information on macOS. Works across Mac OS X 10.0 through modern versions, with support for both Intel and Apple Silicon architectures.
+A lightweight, neofetch-like CLI tool for displaying system information on macOS. Works across Mac OS X 10.5 through modern versions, with support for both Intel and Apple Silicon architectures.
 
 ## Features
 
