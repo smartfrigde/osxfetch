@@ -7,9 +7,9 @@
 #include <string.h>
 #include <sys/sysctl.h>
 #include <CoreServices/CoreServices.h>
+#include "helpers/gpu.h"
 
-
-char* show_cpu_info(void)
+char* get_cpu_info(void)
 {
     static char buffer[1024];
     size_t size=sizeof(buffer);
@@ -61,14 +61,9 @@ char* get_os(void) {
     return os_info;
 }
 
-char* get_gpu_info(void) {
-    static char gpu_info[256];
-
-}
-
-int main() {
+int main() { 
     printf(" %s@%s\n", get_username(), get_hostname());
-    printf("CPU: %s\n", show_cpu_info());
+    printf("CPU: %s\n", get_cpu_info());
     printf("GPU: %s\n", get_gpu_info());
     printf("Memory: %s GB\n", get_memory_info());
     printf("OS: %s", get_os());

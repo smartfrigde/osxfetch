@@ -1,6 +1,6 @@
 CC ?= cc
 
-SRC := src/main.c
+SRC := $(shell find src -name '*.c' | sort)
 BIN_DIR := build
 TARGET := $(BIN_DIR)/osxfetch
 
@@ -15,7 +15,7 @@ PROFILE ?= auto
 
 # Keep flags conservative for old Apple toolchains.
 CFLAGS_COMMON := -O2 -Wall
-LDFLAGS := -framework IOKit -framework CoreFoundation -framework CoreServices
+LDFLAGS := -framework IOKit -framework CoreFoundation -framework CoreServices -framework OpenGL -framework Cocoa
 
 .PHONY: all run clean help arm64 ppc intel intel32 universal-intel
 
