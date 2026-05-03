@@ -15,7 +15,7 @@ PROFILE ?= auto
 
 # Keep flags conservative for old Apple toolchains.
 CFLAGS_COMMON := -O2 -Wall
-LDFLAGS := -framework IOKit -framework CoreFoundation
+LDFLAGS := -framework IOKit -framework CoreFoundation -framework CoreServices
 
 .PHONY: all run clean help arm64 ppc intel intel32 universal-intel
 
