@@ -52,12 +52,12 @@ char* get_os(void) {
 
     static char os_info[256];
     static char os_name[256];
-    if (majorVersion >= 10 && minorVersion >= 12) {
+    if (majorVersion == 10 && minorVersion > 12) {
         strcpy(os_name, "Mac OS X");
     } else {
         strcpy(os_name, "macOS");
     }
-    snprintf(os_info, sizeof(os_info), "%s %d.%d.%d\n", os_name, majorVersion, minorVersion, bugFixVersion);
+    snprintf(os_info, sizeof(os_info), "%s %d.%d.%d", os_name, majorVersion, minorVersion, bugFixVersion);
     return os_info;
 }
 
@@ -66,7 +66,8 @@ int main() {
     printf("CPU: %s\n", get_cpu_info());
     printf("GPU: %s\n", get_gpu_info());
     printf("Memory: %s GB\n", get_memory_info());
-    printf("OS: %s", get_os());
+    printf("OS: %s\n", get_os());
+    printf("Shell: %s\n", getenv("SHELL"));
 
     return 0;
 }
