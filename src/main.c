@@ -6,6 +6,9 @@ int main(int argc, char* argv[]) {
         // No arguments = print all info
         print_user_info();
         print_os_info();
+        print_kernel_info();
+        print_uptime_info();
+        print_hw_model_info();
         print_cpu_info();
         print_gpu_info();
         print_memory_info();
@@ -36,6 +39,15 @@ int main(int argc, char* argv[]) {
                         case 's':
                             print_shell_info();
                             break;
+                        case 't':
+                            print_uptime_info();
+                            break;
+                        case 'k':
+                            print_kernel_info();
+                            break;
+                        case 'w':
+                            print_hw_model_info();
+                            break;
                         case 'h':
                             printf("Usage: %s [-options]\n", argv[0]);
                             printf("Options:\n");
@@ -45,6 +57,9 @@ int main(int argc, char* argv[]) {
                             printf("  m - Print memory information\n");
                             printf("  o - Print OS information\n");
                             printf("  s - Print shell information\n");
+                            printf("  w - Print machine model information\n");
+                            printf("  k - Print kernel information\n");
+                            printf("  t - Print uptime information\n");
                             printf("  h - Show this help message\n");
                             break;
                         default:

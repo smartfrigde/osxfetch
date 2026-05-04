@@ -12,6 +12,15 @@ char* get_cpu_info(void)
     return buffer;
 }
 
+char* get_hw_model_info(void)
+{
+    static char buffer[1024];
+    size_t size=sizeof(buffer);
+    if (sysctlbyname("hw.model", &buffer, &size, NULL, 0) < 0) {
+        perror("sysctl");
+    }
+    return buffer;
+}
 
 char* get_memory_info(void) {
     int mib[2];

@@ -12,6 +12,9 @@ void print_cpu_info(void) {
 void print_gpu_info(void) {
     printf("GPU: %s\n", get_gpu_info());
 }
+void print_hw_model_info(void) {
+    printf("Model: %s\n", get_hw_model_info());
+}
 void print_memory_info(void) {
     printf("Memory: %s GB\n", get_memory_info());
 }
@@ -20,4 +23,10 @@ void print_user_info(void) {
 }
 void print_shell_info(void) {
     printf("Shell: %s\n", getenv("SHELL"));
+}
+void print_uptime_info(void) {
+    printf("Uptime: %d seconds\n", get_uptime());
+}
+void print_kernel_info(void) {
+    printf("Kernel: %s\n", get_kernel_info());
 }

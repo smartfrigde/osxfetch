@@ -23,6 +23,12 @@ int get_os_minor_version(void);
 // Returns the bugfix version of the OS
 int get_os_bugfix_version(void);
 
+// Returns the uptime of the system in seconds
+int get_uptime(void);
+
+// Returns the kernel information
+char* get_kernel_info(void);
+
 #ifdef __cplusplus
 }
 #endif

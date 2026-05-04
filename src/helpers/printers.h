@@ -23,6 +23,14 @@ void print_user_info(void);
 // Prints the current shell to the terminal
 void print_shell_info(void);
 
+// Prints the uptime of the system to the terminal
+void print_uptime_info(void);
+
+// Prints the kernel information to the terminal
+void print_kernel_info(void);
+
+// Prints the machine model information to the terminal
+void print_hw_model_info(void);
 #ifdef __cplusplus
 }
 #endif

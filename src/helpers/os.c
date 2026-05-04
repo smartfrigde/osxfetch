@@ -1,9 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <unistd.h>
 #include <sys/param.h>
 #include <string.h>
+#include <sys/time.h>
 #include <CoreServices/CoreServices.h>
+#include <sys/sysctl.h>
 
 char* get_hostname(void) {
     static char hostname[255];
@@ -48,4 +51,27 @@ char* get_os(void) {
     }
     snprintf(os_info, sizeof(os_info), "%s %d.%d.%d", os_name, majorVersion, minorVersion, bugFixVersion);
     return os_info;
+}
+
+int get_uptime(void)
+{
+    struct timeval boot_time;
+    size_t size = sizeof(boot_time);
+    if (sysctlbyname("kern.boottime", &boot_time, &size, NULL, 0) < 0) {
+        perror("sysctl");
+        return 0;
+    }
+
+    time_t now = time(NULL);
+    return (int)(now - boot_time.tv_sec);
+}
+
+char* get_kernel_info(void)
+{
+    static char buffer[1024];
+    size_t size=sizeof(buffer);
+    if (sysctlbyname("kern.version", &buffer, &size, NULL, 0) < 0) {
+        perror("sysctl");
+    }
+    return buffer;
 }
