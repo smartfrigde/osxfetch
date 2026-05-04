@@ -1,73 +1,59 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <limits.h>
-#include <unistd.h>
-#include <sys/param.h>
-#include <sys/types.h>
-#include <string.h>
-#include <sys/sysctl.h>
-#include <CoreServices/CoreServices.h>
-#include "helpers/gpu.h"
-
-char* get_cpu_info(void)
-{
-    static char buffer[1024];
-    size_t size=sizeof(buffer);
-    if (sysctlbyname("machdep.cpu.brand_string", &buffer, &size, NULL, 0) < 0) {
-        perror("sysctl");
-    }
-    return buffer;
-}
-char* get_hostname(void) {
-    static char hostname[255];
-    gethostname(hostname, sizeof(hostname));
-    return hostname;
-}
-
-char* get_username(void) {
-    static char username[MAXLOGNAME];
-    strcpy(username, getenv("USER")); // NOTE: getenv is not the securest way to get the username, but getlogin is not reliable and returns root for some reason
-    return username;
-}
-
-char* get_memory_info(void) {
-    int mib[2];
-    int64_t physical_memory;
-    size_t length;
-    mib[0] = CTL_HW;
-    mib[1] = HW_MEMSIZE;
-    length = sizeof(int64_t);
-    sysctl(mib, 2, &physical_memory, &length, NULL, 0);
-    static char memory_info[256];
-    snprintf(memory_info, sizeof(memory_info), "%.2f", (double)physical_memory / (1024 * 1024 * 1024));
-    return memory_info;
-}
-
-char* get_os(void) {
-    int majorVersion,minorVersion,bugFixVersion;
-
-    Gestalt(gestaltSystemVersionMajor, &majorVersion);
-    Gestalt(gestaltSystemVersionMinor, &minorVersion);
-    Gestalt(gestaltSystemVersionBugFix, &bugFixVersion);
-
-    static char os_info[256];
-    static char os_name[256];
-    if (majorVersion == 10 && minorVersion > 12) {
-        strcpy(os_name, "Mac OS X");
+#include "helpers/printers.h"
+int main(int argc, char* argv[]) { 
+    if (argc == 1) {
+        // No arguments = print all info
+        print_user_info();
+        print_os_info();
+        print_cpu_info();
+        print_gpu_info();
+        print_memory_info();
+        print_shell_info();
     } else {
-        strcpy(os_name, "macOS");
+        // Parse flags from arguments like -m, -mo, -mog, etc.
+        for (int i = 1; i < argc; i++) {
+            if (argv[i][0] == '-') {
+                // Process each character after the dash
+                for (int j = 1; argv[i][j] != '\0'; j++) {
+                    char flag = argv[i][j];
+                    switch (flag) {
+                        case 'u':
+                            print_user_info();
+                            break;
+                        case 'c':
+                            print_cpu_info();
+                            break;
+                        case 'g':
+                            print_gpu_info();
+                            break;
+                        case 'm':
+                            print_memory_info();
+                            break;
+                        case 'o':
+                            print_os_info();
+                            break;
+                        case 's':
+                            print_shell_info();
+                            break;
+                        case 'h':
+                            printf("Usage: %s [-options]\n", argv[0]);
+                            printf("Options:\n");
+                            printf("  u - Print username and hostname\n");
+                            printf("  c - Print CPU information\n");
+                            printf("  g - Print GPU information\n");
+                            printf("  m - Print memory information\n");
+                            printf("  o - Print OS information\n");
+                            printf("  s - Print shell information\n");
+                            printf("  h - Show this help message\n");
+                            break;
+                        default:
+                            fprintf(stderr, "Unknown option: %c\n", flag);
+                    }
+                }
+            }
+        }
     }
-    snprintf(os_info, sizeof(os_info), "%s %d.%d.%d", os_name, majorVersion, minorVersion, bugFixVersion);
-    return os_info;
-}
-
-int main() { 
-    printf(" %s@%s\n", get_username(), get_hostname());
-    printf("CPU: %s\n", get_cpu_info());
-    printf("GPU: %s\n", get_gpu_info());
-    printf("Memory: %s GB\n", get_memory_info());
-    printf("OS: %s\n", get_os());
-    printf("Shell: %s\n", getenv("SHELL"));
-
+    
     return 0;
 }
