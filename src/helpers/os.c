@@ -44,7 +44,7 @@ char* get_os(void) {
     int bugFixVersion = get_os_bugfix_version();
     static char os_info[256];
     static char os_name[256];
-    if (majorVersion == 10 && minorVersion > 12) {
+    if (majorVersion == 10 && minorVersion < 12) {
         strcpy(os_name, "Mac OS X");
     } else {
         strcpy(os_name, "macOS");
@@ -55,23 +55,25 @@ char* get_os(void) {
 
 int get_uptime(void)
 {
+    int mib[2];
     struct timeval boot_time;
-    size_t size = sizeof(boot_time);
-    if (sysctlbyname("kern.boottime", &boot_time, &size, NULL, 0) < 0) {
-        perror("sysctl");
-        return 0;
-    }
-
+    size_t length;
+    mib[0] = CTL_KERN;
+    mib[1] = KERN_BOOTTIME;
+    length = sizeof(int64_t);
+    sysctl(mib, 2, &boot_time, &length, NULL, 0);
     time_t now = time(NULL);
     return (int)(now - boot_time.tv_sec);
 }
 
 char* get_kernel_info(void)
 {
-    static char buffer[1024];
-    size_t size=sizeof(buffer);
-    if (sysctlbyname("kern.version", &buffer, &size, NULL, 0) < 0) {
-        perror("sysctl");
-    }
-    return buffer;
+    int mib[2];
+    char kern_version[1024];
+    size_t length;
+    mib[0] = CTL_KERN;
+    mib[1] = KERN_VERSION;
+    length = sizeof(kern_version);
+    sysctl(mib, 2, &kern_version, &length, NULL, 0);
+    return kern_version;
 }
