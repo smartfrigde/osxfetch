@@ -60,7 +60,7 @@ int get_uptime(void)
     size_t length;
     mib[0] = CTL_KERN;
     mib[1] = KERN_BOOTTIME;
-    length = sizeof(int64_t);
+    length = sizeof(boot_time);
     sysctl(mib, 2, &boot_time, &length, NULL, 0);
     time_t now = time(NULL);
     return (int)(now - boot_time.tv_sec);
