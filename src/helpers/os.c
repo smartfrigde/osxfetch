@@ -69,11 +69,11 @@ int get_uptime(void)
 char* get_kernel_info(void)
 {
     int mib[2];
-    char kern_version[1024];
+    static char kern_version[1024];
     size_t length;
     mib[0] = CTL_KERN;
     mib[1] = KERN_VERSION;
     length = sizeof(kern_version);
-    sysctl(mib, 2, &kern_version, &length, NULL, 0);
+    sysctl(mib, 2, kern_version, &length, NULL, 0);
     return kern_version;
 }
